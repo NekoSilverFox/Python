@@ -21,7 +21,12 @@
       print("要保留出一个空行!")
   ```
 
-  
+
+## 快捷键
+
+`Ctrl + Q` 速览函数定义和参数说明
+
+![image-20210223150354139](C:\Users\mi\AppData\Roaming\Typora\typora-user-images\image-20210223150354139.png)
 
 ## Python 特点
 
