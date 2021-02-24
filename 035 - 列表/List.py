@@ -1,4 +1,6 @@
 # Python 中的列表（List），其实就是其他语言中的数组
+# 【重点】在Python中，列表可以存放不同类型的数据
+
 name_list = ["Nick", "Wilde", "Juddy"]
 
 # 1. 取值 和 取索引
