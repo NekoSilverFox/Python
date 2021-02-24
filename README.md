@@ -22,6 +22,10 @@
   ```
 
 
+## 函数注释的写法
+
+![image-20210223150451559](C:\Users\mi\AppData\Roaming\Typora\typora-user-images\image-20210223150451559.png)
+
 ## 快捷键
 
 `Ctrl + Q` 速览函数定义和参数说明
