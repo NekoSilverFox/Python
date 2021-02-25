@@ -16,6 +16,6 @@ print(str.find("123"))  # -1，不存在会返回 `-1`
 
 
 # 替换字符串
-# 【注意】 replace 方法不会修改源字符串的内容！！！！！
+# 【注意】 replace 方法不会修改源字符串的内容，而是返回一个新的字符串！！！！！
 print(str.replace("world", "Python"))  # Hello Python
 print(str)  # Hello world
