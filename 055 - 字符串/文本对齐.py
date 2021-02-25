@@ -7,5 +7,5 @@ poem = ["沁园春 · 雪",
         "惟余莽莽"]
 
 for str in poem:
-    # print("|%s|" % str.center(10), " ")  # 10 是指 `宽度`，默认英文空格填充
-    print("|%s|" % str.rjust(10), " ")
+    # print("|%s|" % str.center(15), "　")  # 10 是指 `宽度`，默认英文空格填充
+    print("|%s|" % str.rjust(15), "　")
