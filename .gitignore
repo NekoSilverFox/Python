@@ -17,6 +17,7 @@
 *.db
 *.suo
 *.ipch
+/__pycache__/
 /.idea/
 /out/
 /Debug/
