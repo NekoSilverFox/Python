@@ -22,7 +22,7 @@ name_list.append("Silverfox")  # 追加
 name_list.insert(1, "Two")
 tmp_list = [1, 2, 3]
 name_list.extend(tmp_list)  # 拓展，将其他列表中的内容追加到本列表中
-print(name_list)
+print(name_list)            # 对于列表，使用 `+=` 运算符和 list.extend(另一个列表)的效果是一样的
 
 
 # 删除
