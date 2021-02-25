@@ -2666,6 +2666,40 @@ print("循环结束")
 
 ```
 
+## LINUX 上的 `Shebang` 符号(`#!`)
+
+* `#!`这个符号叫做 `Shebang` 或者 `Sha-bang`
+* `Shebang` 通常在 `Unix` 系统脚本的中 **第一行开头** 使用
+* 指明 **执行这个脚本文件** 的 **解释程序**
+
+### 使用 Shebang 的步骤
+
+* 1. 使用 `which` 查询 `python3` 解释器所在路径
+
+```bash
+$ which python3
+```
+
+* 2. 修改要运行的 **主 python 文件**，在第一行增加以下内容
+
+```python
+#! /usr/bin/python3
+```
+
+* 3. 修改 **主 python 文件** 的文件权限，增加执行权限
+
+```bash
+$ chmod +x cards_main.py
+```
+
+* 4. 在需要时执行程序即可
+
+```bash
+./cards_main.py
+```
+
+
+
 
 
 
