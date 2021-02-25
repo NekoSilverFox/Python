@@ -2422,17 +2422,17 @@ hello_str.isdigit       hello_str.rfind
 
 #### 1) 判断类型 - 9
 
-| 方法               | 说明                                                         |
-| ------------------ | ------------------------------------------------------------ |
-| string.isspace()   | 如果 string 中只包含空格，则返回 True                        |
-| string.isalnum()   | 如果 string 至少有一个字符并且所有字符都是字母或数字则返回 True |
-| string.isalpha()   | 如果 string 至少有一个字符并且所有字符都是字母则返回 True    |
-| string.isdecimal() | 如果 string 只包含数字则返回 True，`全角数字`                |
-| string.isdigit()   | 如果 string 只包含数字则返回 True，`全角数字`、`⑴`、`\u00b2` |
-| string.isnumeric() | 如果 string 只包含数字则返回 True，`全角数字`，`汉字数字`    |
-| string.istitle()   | 如果 string 是标题化的(每个单词的首字母大写)则返回 True      |
-| string.islower()   | 如果 string 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 True |
-| string.isupper()   | 如果 string 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 True |
+| 方法                   | 说明                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| string.isspace()       | 如果 string 中只包含空格，则返回 True                        |
+| string.isalnum()       | 如果 string 至少有一个字符并且所有字符都是字母或数字则返回 True |
+| string.isalpha()       | 如果 string 至少有一个字符并且所有字符都是字母则返回 True    |
+| **string.isdecimal()** | **如果 string 只包含数字则返回 True，`全角数字`**            |
+| **string.isdigit()**   | **如果 string 只包含数字则返回 True，`全角数字`、`⑴`、`\u00b2`** |
+| **string.isnumeric()** | **如果 string 只包含数字则返回 True，`全角数字`，`汉字数字`** |
+| string.istitle()       | 如果 string 是标题化的(每个单词的首字母大写)则返回 True      |
+| string.islower()       | 如果 string 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 True |
+| string.isupper()       | 如果 string 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 True |
 
 #### 2) 查找和替换 - 7
 
