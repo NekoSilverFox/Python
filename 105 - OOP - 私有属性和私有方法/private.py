@@ -14,3 +14,6 @@ class Women:
 Juddy = Women("Juddy")
 # print(Juddy.age)
 # Juddy.secret()  # 私有方法不允许在外部调用
+
+# 【仅供科普】Python 中的私有方法是伪私有方法/属性。没有真正意义上的私有
+print(Juddy._Women__age)
