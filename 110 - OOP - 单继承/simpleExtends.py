@@ -28,7 +28,7 @@ dog.sleep()
 
 print("^" * 50)
 
-xtq = Dog()
+xtq = XiaoTianQuan()
 xtq.eat()
 xtq.drink()
 xtq.run()
