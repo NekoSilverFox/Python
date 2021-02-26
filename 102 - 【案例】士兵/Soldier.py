@@ -23,7 +23,12 @@ class Soldier:
         self.gun = gun
 
     def fire(self):
-        if (self.gun == None):
+        # 【重点】 `is` 会比较两个对象的【内存地址】是否一样，而不是值
+        # `is` 和 `is not` 是身份运算符
+        # 身份运算符用于比较两个对象的内存地址是否一致 -- 是否是对同一个对象的引用
+        # 在 Python 中针对 `None` 进行比较时，建议使用 is / is not
+        if (self.gun is None):
+        # if (self.gun == None):
             print("[%s] 没有枪！" % self.name)
             return
 
