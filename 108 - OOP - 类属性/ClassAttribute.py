@@ -14,6 +14,7 @@ class Tool(object):
 
 tool1 = Tool("tool1")
 print(Tool.count)  # 建议使用类名获取类的属性
+                # 原因：https://www.bilibili.com/video/BV1ex411x7Em?p=411&spm_id_from=pageDriver
 
 tool2 = Tool("tool2")
 print(Tool.count)
