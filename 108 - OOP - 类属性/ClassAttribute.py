@@ -13,7 +13,7 @@ class Tool(object):
 
 
 tool1 = Tool("tool1")
-print(Tool.count)
+print(Tool.count)  # 建议使用类名获取类的属性
 
 tool2 = Tool("tool2")
 print(Tool.count)
