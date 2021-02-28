@@ -9,5 +9,7 @@ except ZeroDivisionError:
 except ValueError:
     # 处理代码
     print("请输入正确的整数")
-
+# 捕获未知错误     ↓ 注意这里是 `as`
+except Exception as unknown:
+    print("发生异常错误： %s" % unknown)
 print("-" * 100)
