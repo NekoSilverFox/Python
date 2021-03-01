@@ -6118,6 +6118,382 @@ def __update_sprites(self):
         group.draw(self.screen)
 ```
 
+# 游戏背景
+
+## 目标
+
+* 背景交替滚动的思路确定
+* 显示游戏背景
+
+## 01. 背景交替滚动的思路确定
+
+运行 **备课代码**，**观察** 背景图像的显示效果：
+
+* 游戏启动后，**背景图像** 会 **连续不断地** **向下方** 移动
+* 在 **视觉上** 产生英雄的飞机不断向上方飞行的 **错觉** —— 在很多跑酷类游戏中常用的套路
+  * **游戏的背景** 不断变化
+  * **游戏的主角** 位置保持不变
+
+### 1.1 实现思路分析
+
+ ![013_背景图片交替滚动-w640](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025262948537/013_背景图片交替滚动.png)
+
+**解决办法**
+
+1. 创建两张背景图像精灵
+   * 第 `1` 张 **完全和屏幕重合**
+   * 第 `2` 张在 **屏幕的正上方**
+2. 两张图像 **一起向下方运动**
+   * `self.rect.y += self.speed`
+3. 当 **任意背景精灵** 的 `rect.y >= 屏幕的高度` 说明已经 **移动到屏幕下方**
+4. 将 **移动到屏幕下方的这张图像** 设置到 **屏幕的正上方**
+   * `rect.y = -rect.height`  
+
+### 1.2 设计背景类
+
+![012_派生Background子类-w398](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025262948537/012_派生Background子类.png)
+
+* **初始化方法**
+  * 直接指定 **背景图片**
+  * `is_alt` 判断是否是另一张图像
+    * `False` 表示 **第一张图像**，需要与屏幕重合
+    * `True` 表示 **另一张图像**，在屏幕的正上方
+* **update()** 方法
+  * 判断 **是否移动出屏幕**，如果是，将图像设置到 **屏幕的正上方**，从而实现 **交替滚动**
+
+> **继承** 如果父类提供的方法，不能满足子类的需求：
+>
+> * 派生一个子类
+> * 在子类中针对特有的需求，重写父类方法，并且进行扩展
+
+## 02. 显示游戏背景
+
+### 2.1 背景精灵的基本实现
+
+* 在 `plane_sprites` 新建 `Background` 继承自 `GameSprite`
+
+```python
+class Background(GameSprite):
+    """游戏背景精灵"""
+
+    def update(self):
+
+        # 1. 调用父类的方法实现
+        super().update()
+
+        # 2. 判断是否移出屏幕，如果移出屏幕，将图像设置到屏幕的上方
+        if self.rect.y >= SCREEN_RECT.height:
+            self.rect.y = -self.rect.height
+
+```
+
+### 2.2 在 `plane_main.py` 中显示背景精灵
+
+1. 在 `__create_sprites` 方法中创建 **精灵** 和 **精灵组**
+2. 在 `__update_sprites` 方法中，让 **精灵组** 调用 `update()` 和 `draw()` 方法
+
+> `__create_sprites` 方法
+
+```python
+def __create_sprites(self):
+
+    # 创建背景精灵和精灵组
+    bg1 = Background("./images/background.png")
+    bg2 = Background("./images/background.png")
+    bg2.rect.y = -bg2.rect.height
+    
+    self.back_group = pygame.sprite.Group(bg1, bg2)
+```
+
+> `__update_sprites` 方法
+
+```python
+def __update_sprites(self):
+
+    self.back_group.update()
+    self.back_group.draw(self.screen)
+```
+
+### 2.3 利用初始化方法，简化背景精灵创建
+
+> 思考 —— 上一小结完成的代码存在什么样的问题？能否简化？
+
+* 在主程序中，创建的**两个背景精灵**，**传入了相同的图像文件路径**
+* 创建 **第二个 背景精灵** 时，**在主程序中**，设置背景精灵的图像位置
+
+> 思考 —— 精灵 **初始位置** 的设置，应该 **由主程序负责**？还是 **由精灵自己负责**？
+
+**答案** —— **由精灵自己负责**
+
+* 根据面向对象设计原则，应该将对象的职责，封装到类的代码内部
+* 尽量简化程序调用一方的代码调用
+
+![012_派生Background子类-w398](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025262948537/012_派生Background子类.png)
+
+* **初始化方法**
+  * 直接指定 **背景图片**
+  * `is_alt` 判断是否是另一张图像
+    * `False` 表示 **第一张图像**，需要与屏幕重合
+    * `True` 表示 **另一张图像**，在屏幕的正上方
+
+在 `plane_sprites.py` 中实现 `Background` 的 **初始化方法**
+
+```python
+def __init__(self, is_alt=False):
+
+    image_name = "./images/background.png"
+    super().__init__(image_name)
+       
+    # 判断是否交替图片，如果是，将图片设置到屏幕顶部
+    if is_alt:
+        self.rect.y = -self.rect.height     
+```
+
+* 修改 `plane_main` 的 `__create_sprites` 方法
+
+```python
+# 创建背景精灵和精灵组
+bg1 = Background()
+bg2 = Background(True)
+
+self.back_group = pygame.sprite.Group(bg1, bg2)
+```
+
+
+
+# 敌机出场
+
+## 目标
+
+* 使用 **定时器** 添加敌机
+* 设计 `Enemy` 类
+
+## 01. 使用定时器添加敌机
+
+运行 **备课代码**，**观察** 敌机的 **出现规律**：
+
+1. 游戏启动后，**每隔 1 秒** 会 **出现一架敌机**
+2. 每架敌机 **向屏幕下方飞行**，飞行 **速度各不相同**
+3. 每架敌机出现的 **水平位置** 也不尽相同
+4. 当敌机 **从屏幕下方飞出**，不会再飞回到屏幕中
+
+### 1.1 定时器
+
+* 在 `pygame` 中可以使用 `pygame.time.set_timer()` 来添加 **定时器**
+* 所谓 **定时器**，就是 **每隔一段时间**，去 **执行一些动作**
+
+```python
+set_timer(eventid, milliseconds) -> None
+```
+
+* `set_timer` 可以创建一个 **事件**
+* 可以在 **游戏循环** 的 **事件监听** 方法中捕获到该事件
+* 第 1 个参数 **事件代号** 需要基于常量 `pygame.USEREVENT` 来指定
+  * `USEREVENT` 是一个整数，再增加的事件可以使用 `USEREVENT + 1` 指定，依次类推...
+* 第 2 个参数是 **事件触发** 间隔的 **毫秒值**
+
+**定时器事件的监听**
+
+* 通过 `pygame.event.get()` 可以获取当前时刻所有的 **事件列表**
+* **遍历列表** 并且判断 `event.type` 是否等于 `eventid`，如果相等，表示 **定时器事件** 发生
+
+### 1.2 定义并监听创建敌机的定时器事件
+
+`pygame` 的 **定时器** 使用套路非常固定：
+
+1. 定义 **定时器常量** —— `eventid`
+2. 在 **初始化方法** 中，调用 `set_timer` 方法 **设置定时器事件**
+3. 在 **游戏循环** 中，**监听定时器事件**
+
+#### 1) 定义事件
+
+* 在 `plane_sprites.py` 的顶部定义 **事件常量**
+
+```python
+# 敌机的定时器事件常量
+CREATE_ENEMY_EVENT = pygame.USEREVENT
+```
+
+* 在 `PlaneGame` 的 **初始化方法** 中 **创建用户事件**
+
+```python
+# 4. 设置定时器事件 - 每秒创建一架敌机
+pygame.time.set_timer(CREATE_ENEMY_EVENT, 1000)
+```
+
+#### 2) 监听定时器事件
+
+* 在 `__event_handler` 方法中增加以下代码：
+
+```python
+def __event_handler(self):
+    
+    for event in pygame.event.get():
+    
+        # 判断是否退出游戏
+        if event.type == pygame.QUIT:
+            PlaneGame.__game_over()
+        elif event.type == CREATE_ENEMY_EVENT:
+            print("敌机出场...")
+```
+
+## 02. 设计 `Enemy` 类
+
+1. 游戏启动后，**每隔 1 秒** 会 **出现一架敌机**
+2. 每架敌机 **向屏幕下方飞行**，飞行 **速度各不相同**
+3. 每架敌机出现的 **水平位置** 也不尽相同
+4. 当敌机 **从屏幕下方飞出**，不会再飞回到屏幕中
+
+![014_派生Enemy子类-w657](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025309517247/014_派生Enemy子类.png)
+
+* **初始化方法**
+  * 指定 **敌机图片**
+  * **随机** 敌机的 **初始位置** 和 **初始速度**
+* 重写 **update()** 方法
+  * 判断 **是否飞出屏幕**，如果是，从 **精灵组** 删除
+
+### 2.1 敌机类的准备
+
+* 在 `plane_sprites` 新建 `Enemy` 继承自 `GameSprite`
+* 重写 **初始化方法**，直接指定 **图片名称**
+* 暂时 **不实现** **随机速度** 和 **随机位置** 的指定
+* 重写 `update` 方法，判断是否飞出屏幕
+
+```python
+class Enemy(GameSprite):
+    """敌机精灵"""
+    
+    def __init__(self):
+        
+        # 1. 调用父类方法，创建敌机精灵，并且指定敌机的图像
+        super().__init__("./images/enemy1.png")
+
+        # 2. 设置敌机的随机初始速度
+
+        # 3. 设置敌机的随机初始位置
+    
+    def update(self):
+        
+        # 1. 调用父类方法，让敌机在垂直方向运动
+        super().update()
+        
+        # 2. 判断是否飞出屏幕，如果是，需要将敌机从精灵组删除
+        if self.rect.y >= SCREEN_RECT.height:
+            print("敌机飞出屏幕...")    
+```
+
+### 2.2 创建敌机
+
+**演练步骤**
+
+1. 在 `__create_sprites`，添加 **敌机精灵组**
+   * 敌机是 **定时被创建的**，因此在初始化方法中，不需要创建敌机
+2. 在 `__event_handler`，创建敌机，并且 **添加到精灵组**
+   * 调用 **精灵组** 的 `add` 方法可以 **向精灵组添加精灵**
+3. 在 `__update_sprites`，让 **敌机精灵组** 调用 `update` 和 `draw` 方法
+
+![006_pygame.SpriteII](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025309517247/006_pygame.SpriteII.png)
+
+**演练代码**
+
+* 修改 `plane_main` 的 `__create_sprites` 方法
+
+```python
+# 敌机组
+self.enemy_group = pygame.sprite.Group()
+```
+
+* 修改 `plane_main` 的 `__update_sprites` 方法
+
+```python
+self.enemy_group.update()
+self.enemy_group.draw(self.screen)
+```
+
+* 定时出现敌机
+
+```python
+elif event.type == CREATE_ENEMY_EVENT:
+    self.enemy_group.add(Enemy())
+```
+
+### 2.3 随机敌机位置和速度
+
+#### 1) 导入模块
+
+* 在导入模块时，**建议** 按照以下顺序导入
+
+```python
+1. 官方标准模块导入
+2. 第三方模块导入
+3. 应用程序模块导入
+```
+
+* 修改 `plane_sprites.py` 增加 `random` 的导入
+
+```python
+import random
+```
+
+#### 2) 随机位置
+
+![015_飞机初始位置-w360](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025309517247/015_飞机初始位置.png)
+
+使用 `pygame.Rect` 提供的 `bottom` 属性，在指定敌机初始位置时，会比较方便
+
+*  `bottom = y + height`
+*  `y = bottom - height`
+
+#### 3) 代码实现
+
+* 修改 **初始化方法**，随机敌机出现 **速度** 和 **位置**
+
+```python
+def __init__(self):
+
+    # 1. 调用父类方法，创建敌机精灵，并且指定敌机的图像
+    super().__init__("./images/enemy1.png")
+
+    # 2. 设置敌机的随机初始速度 1 ~ 3
+    self.speed = random.randint(1, 3)
+
+    # 3. 设置敌机的随机初始位置
+    self.rect.bottom = 0
+    
+    max_x = SCREEN_RECT.width - self.rect.width
+    self.rect.x = random.randint(0, max_x)
+```
+
+### 2.4 移出屏幕销毁敌机
+
+* 敌机移出屏幕之后，如果 **没有撞到英雄**，敌机的历史使命已经终结
+* 需要从 **敌机组** 删除，否则会造成 **内存浪费**
+
+#### 检测敌机被销毁
+
+* `__del__` 内置方法会在对象被销毁前调用，在开发中，可以用于 **判断对象是否被销毁**
+
+```python
+def __del__(self):
+    print("敌机挂了 %s" % self.rect)
+```
+
+#### 代码实现
+
+![006_pygame.SpriteII](C:/Users/mi/Desktop/【资料】Python/04 项目实战资料/课程讲义/markdown/media/15025309517247/006_pygame.SpriteII.png)
+
+* 判断敌机是否飞出屏幕，如果是，调用 `kill()` 方法从所有组中删除
+
+```python
+def update(self):
+    super().update()
+    
+    # 判断敌机是否移出屏幕
+    if self.rect.y >= SCREEN_RECT.height:
+        # 将精灵从所有组中删除
+        self.kill()
+```
+
 
 
 
