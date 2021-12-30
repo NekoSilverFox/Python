@@ -8,4 +8,8 @@ def sum2Number(num1, num2):
     """
     return num1 + num2
 
-sum2Number()
+
+def paratamerTest(num):
+    ++num
+    print(num)
+
